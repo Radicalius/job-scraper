@@ -1,3 +1,5 @@
+from handlers.Job import Job
+
 class Handler:
 
     type = "generic"

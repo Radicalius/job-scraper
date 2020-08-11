@@ -1,5 +1,6 @@
 import logging
 from handlers import *
+import csv
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
@@ -12,6 +13,8 @@ fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
+
+writer = csv.writer(open("jobs.csv", "w"))
 
 logging.info("Beginning Ingestion")
 
@@ -38,22 +41,23 @@ for handler in handlers:
         continue
 
     for page in range(pages):
-        logger.info("Scanning page "+page)
+        logger.info("Scanning page "+str(page))
         try:
             meta = h.scan_page(page)
-            logging.info("Found {0} jobs".formate(len(meta)))
+            logging.info("Found {0} jobs".format(len(meta)))
         except:
-            logging.warn("Error while scanning page "+page, exc_info=True)
+            logging.warn("Error while scanning page "+str(page), exc_info=True)
             continue
 
-        for job in meta:
-            logger.info("Scanning job "+job)
+        for i,job in enumerate(meta):
+            logger.info("Scanning job "+str(i))
             try:
-                job = h.scan_posting(page)
+                job = h.scan_posting(job)
+                job.write_to_csv(writer)
                 jobs += 1
                 tot_jobs += 1
             except:
-                logging.warn("Error while scanning job "+job, exc_info=True)
+                logging.warn("Error while scanning job "+str(i), exc_info=True)
                 continue
 
     logger.info("Finished scanning jobs from {0}; added {1} jobs".format(handler.type, jobs))
