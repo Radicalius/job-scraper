@@ -1,6 +1,7 @@
 import logging
 from handlers import *
 from writer import AsyncCsvWriter
+from worker import AsyncWorker
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
@@ -17,7 +18,10 @@ logger.addHandler(ch)
 writer = AsyncCsvWriter("jobs.csv")
 writer.start()
 
-logging.info("Beginning Ingestion")
+AsyncWorker.logger = logger
+AsyncWorker.writer = writer
+
+logger.info("Beginning Ingestion")
 
 tot_jobs = 0
 
@@ -27,39 +31,37 @@ for handler in handlers:
 
     logger.info("Scanning jobs from "+handler.type)
 
+    AsyncWorker.create(100)
+
     try:
         h = handler()
+        AsyncWorker.handler = h
         logger.info("Initialized handler successfully")
     except:
-        logging.warn("Error while initializing handler", exc_info=True)
+        logger.warn("Error while initializing handler", exc_info=True)
         continue
 
     try:
         pages = h.get_num_pages()
         logger.info("Found {0} pages of jobs".format(pages))
     except:
-        logging.warn("Error while finding number of pages", exc_info=True)
+        logger.warn("Error while finding number of pages", exc_info=True)
         continue
 
     for page in range(pages):
         logger.info("Scanning page "+str(page))
         try:
             meta = h.scan_page(page)
-            logging.info("Found {0} jobs".format(len(meta)))
+            logger.info("Found {0} jobs".format(len(meta)))
         except:
-            logging.warn("Error while scanning page "+str(page), exc_info=True)
+            logger.warn("Error while scanning page "+str(page), exc_info=True)
             continue
 
         for i,job in enumerate(meta):
-            logger.info("Scanning job "+str(i))
-            try:
-                job = h.scan_posting(job)
-                job.write_to_csv(writer)
-                jobs += 1
-                tot_jobs += 1
-            except:
-                logging.warn("Error while scanning job "+str(i), exc_info=True)
-                continue
+            AsyncWorker.queue_job(job)
+
+    AsyncWorker.done()
+    AsyncWorker.join()
 
     logger.info("Finished scanning jobs from {0}; added {1} jobs".format(handler.type, jobs))
 
