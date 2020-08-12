@@ -1,6 +1,6 @@
 import logging
 from handlers import *
-import csv
+from writer import AsyncCsvWriter
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
@@ -14,7 +14,8 @@ ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-writer = csv.writer(open("jobs.csv", "w"))
+writer = AsyncCsvWriter("jobs.csv")
+writer.start()
 
 logging.info("Beginning Ingestion")
 
