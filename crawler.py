@@ -15,7 +15,7 @@ ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
 
-writer = AsyncCsvWriter("jobs.csv")
+writer = AsyncCsvWriter("jobs.csv", logger)
 writer.start()
 
 AsyncWorker.logger = logger
@@ -31,7 +31,7 @@ for handler in handlers:
 
     logger.info("Scanning jobs from "+handler.type)
 
-    AsyncWorker.create(100)
+    AsyncWorker.create(20)
 
     try:
         h = handler()
@@ -61,7 +61,7 @@ for handler in handlers:
             AsyncWorker.queue_job(job)
 
     AsyncWorker.done()
-    AsyncWorker.join()
+    AsyncWorker.wait()
 
     logger.info("Finished scanning jobs from {0}; added {1} jobs".format(handler.type, jobs))
 

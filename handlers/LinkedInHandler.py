@@ -9,7 +9,7 @@ class LinkedInHandler(Handler):
 
     type = "LinkedIn"
     request = """
-GET /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=software%20engineer&location=&geoId=&trk=public_jobs_jobs-search-bar_search-submit&redirect=false&position=1&pageNum=0&start={1} HTTP/2
+GET /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=software%20engineer&location=&geoId=&trk=public_jobs_jobs-search-bar_search-submit&redirect=false&position=1&pageNum={2}&start={1} HTTP/2
 Host: www.linkedin.com
 User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
 Accept: */*
@@ -28,10 +28,11 @@ TE: Trailers
         r1 = requests.get("https://www.linkedin.com/jobs/search/?geoId=103644278&keywords=software%20engineer&location=United%20States")
         self.cookies = r1.cookies
         bs = BeautifulSoup(r1.text, "lxml")
-        return int(int(bs.find(class_="results-context-header__job-count").text.replace(",","").replace("+","")) / 25)
+        #return int(int(bs.find(class_="results-context-header__job-count").text.replace(",","").replace("+","")) / 25)
+        return 40
 
     def scan_page(self,n):
-        r2 = make_request(LinkedInHandler.request.format(self.cookies["JSESSIONID"], n*25), cookies=self.cookies)
+        r2 = make_request(LinkedInHandler.request.format(self.cookies["JSESSIONID"], (n)*25, n//40), cookies=self.cookies)
         bs = BeautifulSoup(r2.text, "lxml")
         #result-card__title job-result-card__title title
         #result-card__full-card-link url

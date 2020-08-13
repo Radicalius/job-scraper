@@ -26,8 +26,8 @@ class AsyncWorker(threading.Thread):
             AsyncWorker.q.put(AsyncWorker.EOF)
 
     @staticmethod
-    def join():
-        for i in AsyncWorkers.workers:
+    def wait():
+        for i in AsyncWorker.workers:
             i.join()
         AsyncWorker.workers = []
 

@@ -6,5 +6,6 @@ from handlers.DiceHandler import DiceHandler
 from handlers.LinkedInHandler import LinkedInHandler
 
 handlers = [
-    LinkedInHandler
+    LinkedInHandler,
+    DiceHandler
 ]

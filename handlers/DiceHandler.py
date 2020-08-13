@@ -35,7 +35,7 @@ TE: Trailers
     def scan_posting(self, m):
         title = m["title"]
         comp = m["companyName"]
-        loc = m["jobLocation"]["displayName"]
+        loc = "n/a" if "jobLocation" not in m else m["jobLocation"]["displayName"]
         url = m["detailsPageUrl"]
 
         details = requests.get(url).text
