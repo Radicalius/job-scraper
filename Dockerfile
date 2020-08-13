@@ -6,4 +6,4 @@ COPY . /app
 
 WORKDIR /app
 
-CMD python crawler.py
+CMD /bin/bash start.sh
