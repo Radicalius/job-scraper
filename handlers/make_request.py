@@ -20,12 +20,12 @@ meths = {
     "POST": requests.post
 }
 
-def make_request(req):
+def make_request(req, cookies=None):
     """make a request formatted like google inspect toolbar and return result"""
     lines = req.split("\n")
     meth, path, ver = lines[1].split(" ")
-    headers = {i.split(":")[0].strip(): i.split(":")[1].strip() for i in lines[2:] if len(i.split(":")) > 1}
-    return meths[meth]("https://"+headers["Host"]+path, headers=headers)
+    headers = {i.split(":")[0].strip(): ":".join(i.split(":")[1:]).strip() for i in lines[2:] if len(i.split(":")) > 1}
+    return meths[meth]("https://"+headers["Host"]+path, headers=headers, cookies=cookies)
 
 if __name__ == "__main__":
     print(make_request(request).json())
