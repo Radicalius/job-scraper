@@ -1,10 +1,11 @@
 import queue, threading
+from filter import AsyncFilter
 
 class AsyncWorker(threading.Thread):
 
     q = queue.Queue()
     logger = None
-    writer = None
+    filter = None
     handler = None
 
     EOF = ()
@@ -38,12 +39,13 @@ class AsyncWorker(threading.Thread):
         while True:
             meta = AsyncWorker.q.get()
             if meta is AsyncWorker.EOF:
+                #AsyncWorker.filter.queue_job(AsyncFilter.EOF)
                 break
 
             #AsyncWorker.logger.info("Scanning job")
             try:
                 job = AsyncWorker.handler.scan_posting(meta)
-                job.write_to_csv(AsyncWorker.writer)
+                AsyncWorker.filter.queue_job(job)
             except:
                 AsyncWorker.logger.warn("Error while scanning job", exc_info=True)
                 continue

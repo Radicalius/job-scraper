@@ -2,6 +2,8 @@ import queue, csv, threading
 
 class AsyncCsvWriter(threading.Thread):
 
+    EOF = ()
+
     def __init__(self, fname, logger):
         threading.Thread.__init__(self)
         self.jobs = 0
@@ -14,10 +16,9 @@ class AsyncCsvWriter(threading.Thread):
 
     def run(self):
         while True:
-            try:
-                row = self.q.get(timeout=10)
-                self.csv.writerow(row)
-                self.jobs+=1
-                self.logger.info("Written "+str(self.jobs))
-            except:
+            row = self.q.get()
+            if row is AsyncCsvWriter.EOF:
                 break
+            self.csv.writerow(row)
+            self.jobs+=1
+            self.logger.info("Written "+str(self.jobs))

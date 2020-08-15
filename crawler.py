@@ -2,11 +2,12 @@ import logging
 from handlers import *
 from writer import AsyncCsvWriter
 from worker import AsyncWorker
+from filter import AsyncFilter
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
 fh = logging.FileHandler('jobfeed.log')
-fh.setLevel(logging.DEBUG)
+fh.setLevel(logging.WARNING)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s/%(levelname)s: %(message)s')
@@ -18,8 +19,11 @@ logger.addHandler(ch)
 writer = AsyncCsvWriter("jobs.csv", logger)
 writer.start()
 
+filter = AsyncFilter(writer, logger)
+filter.start()
+
 AsyncWorker.logger = logger
-AsyncWorker.writer = writer
+AsyncWorker.filter = filter
 
 logger.info("Beginning Ingestion")
 
@@ -64,5 +68,7 @@ for handler in handlers:
     AsyncWorker.wait()
 
     logger.info("Finished scanning jobs from {0}; added {1} jobs".format(handler.type, jobs))
+
+filter.queue_job(AsyncFilter.EOF)
 
 logger.info("Ingestion Finished; added {0} jobs".format(tot_jobs))
