@@ -7,6 +7,8 @@ import re
 
 class IndeedHandler(Handler):
 
+    type = "Indeed"
+
     def __init__(self):
         self.url = "https://www.indeed.com/jobs?q=software+engineer&start={0}"
 
