@@ -3,6 +3,6 @@
 if [ -s "jobs.csv" ]; then
   echo "Jobs file exists; skipping scraping"
 else
-  python crawler.py &
+  (python crawler.py || python post.py) &
 fi
 python dummy_server.py $PORT

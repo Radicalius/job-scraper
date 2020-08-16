@@ -2,18 +2,19 @@ import flask
 from flask import *
 import sys
 import time
+import datetime
 
 app = Flask(__name__)
 
-last_updated = time.time()
+last_updated = datetime.datetime.now().strftime("%m/%d %H:%M")
 
 @app.route("/")
 def index():
     return """
 <h2> New Grad Software Engineering Jobs </h2>
 <hr/>
-<img src=https://img.shields.io/endpoint?url=https://new-grad-job-list.herokuapp.com/number_of_jobs&style=plastic />
-<img src=https://img.shields.io/endpoint?url=https://new-grad-job-list.herokuapp.com/last_update&style=plastic />
+<img src=https://img.shields.io/endpoint?url=http://cache.nlogn.blog/job-scraper/number_of_jobs&style=plastic />
+<img src=https://img.shields.io/endpoint?url=http://cache.nlogn.blog/job-scraper/last_update&style=plastic />
 <p>A list of entry level software engineering jobs for recent graduates compiled from major job boards and updated daily<p>
 <h3>Download</h3>
 <ul>
@@ -42,7 +43,7 @@ def last_update():
         {
             "schemaVersion": 1,
             "label": "updated",
-            "message": str(int((time.time() - last_updated) // 3600))+" hours ago",
+            "message": last_updated,
             "color": "green"
         }
     )
