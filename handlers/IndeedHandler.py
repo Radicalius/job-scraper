@@ -17,7 +17,7 @@ class IndeedHandler(Handler):
 
     def scan_page(self, n):
         text = requests.get(self.url.format((n-1)*10)).text
-        bs = BeautifulSoup(text, "lxml")
+        bs = BeautifulSoup(text, "html.parser")
         as_ = bs.findAll("a", {"class": "jobtitle turnstileLink "})
         links = ['https://indeed.com'+i['href'] for i in as_]
         titles = [i.text for i in as_]
@@ -39,7 +39,7 @@ class IndeedHandler(Handler):
 
     def scan_posting(self, meta):
         text = requests.get(meta["url"]).text
-        bs = BeautifulSoup(text, "lxml")
+        bs = BeautifulSoup(text, "html.parser")
         desc = bs.find("div", {"id": "jobDescriptionText"})
         return Job(
             meta["title"],

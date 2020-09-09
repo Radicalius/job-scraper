@@ -44,7 +44,7 @@ Referer: https://www.monster.com/jobs/search/?q=software-engineer&intcid=skr_nav
 
     def scan_posting(self, meta):
         text = requests.get(meta["url"]).text
-        bs = BeautifulSoup(text, "lxml")
+        bs = BeautifulSoup(text, "html.parser")
         desc = bs.find("div", {"class": "job-description"}).text
         return Job(
             meta["title"],

@@ -9,7 +9,7 @@ class LinkedInHandler(Handler):
 
     type = "LinkedIn"
     request = """
-GET /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=software%20engineer&location=&geoId=&trk=public_jobs_jobs-search-bar_search-submit&redirect=false&position=1&pageNum={2}&start={1} HTTP/2
+GET /jobs-guest/jobs/api/seeMoreJobPostings/search?keywords=junior%20new%20grad%20software%20engineer&location=&geoId=&trk=public_jobs_jobs-search-bar_search-submit&redirect=false&position=1&pageNum={2}&start={1} HTTP/2
 Host: www.linkedin.com
 User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
 Accept: */*
@@ -27,13 +27,13 @@ TE: Trailers
     def get_num_pages(self):
         r1 = requests.get("https://www.linkedin.com/jobs/search/?geoId=103644278&keywords=software%20engineer&location=United%20States")
         self.cookies = r1.cookies
-        bs = BeautifulSoup(r1.text, "lxml")
+        bs = BeautifulSoup(r1.text, "html.parser")
         #return int(int(bs.find(class_="results-context-header__job-count").text.replace(",","").replace("+","")) / 25)
         return 40
 
     def scan_page(self,n):
         r2 = make_request(LinkedInHandler.request.format(self.cookies["JSESSIONID"], (n)*25, n//40), cookies=self.cookies)
-        bs = BeautifulSoup(r2.text, "lxml")
+        bs = BeautifulSoup(r2.text, "html.parser")
         #result-card__title job-result-card__title title
         #result-card__full-card-link url
         #result-card__subtitle-link job-result-card__subtitle-link company
@@ -47,7 +47,7 @@ TE: Trailers
     def scan_posting(self,meta):
 
         r3 = requests.get(meta["url"])
-        bs = BeautifulSoup(r3.text, "lxml")
+        bs = BeautifulSoup(r3.text, "html.parser")
 
         desc = bs.findAll("div", {"class": "show-more-less-html__markup show-more-less-html__markup--clamp-after-5"})[0].text
 
