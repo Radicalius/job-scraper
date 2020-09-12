@@ -4,6 +4,7 @@ import sys
 import time
 import datetime
 import csv
+import requests
 
 app = Flask(__name__)
 
@@ -92,10 +93,4 @@ def update():
     requests.post("http://cache.nlogn.blog/job-scraper/last_update")
 
 if __name__ == "__main__":
-
-    with open('jobs.csv') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            jobs.append(row)
-
     app.run(host="0.0.0.0", port=int(sys.argv[1]))

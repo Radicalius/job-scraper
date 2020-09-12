@@ -9,7 +9,7 @@ from handlers.MonsterHandler import MonsterHandler
 
 handlers = [
     #MonsterHandler,
-    #IndeedHandler,
-    LinkedInHandler,
+    IndeedHandler,
+    #LinkedInHandler,
     #DiceHandler
 ]
