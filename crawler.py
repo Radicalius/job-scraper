@@ -3,6 +3,8 @@ from handlers import *
 from writer import AsyncCsvWriter
 from worker import AsyncWorker
 from filter import AsyncFilter
+import requests
+import os
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
@@ -72,3 +74,5 @@ for handler in handlers:
 filter.queue_job(AsyncFilter.EOF)
 
 logger.info("Ingestion Finished; added {0} jobs".format(tot_jobs))
+
+requests.get("http://localhost:{0}/update".format(os.environ["PORT"]))
