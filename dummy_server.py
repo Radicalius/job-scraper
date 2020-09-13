@@ -37,14 +37,20 @@ def page(number, num):
     resp = "<table><tr><td>"
     resp += "<div style='overflow: scroll; height:500px' valign=top><h2>Page {0}</h2><ul>".format(number)
     for i in range(int(number)*20-20, int(number)*20):
-        resp += "<li>"
-        resp += "<a href=/page/{2}/desc/{1}><h3>{0}</h3></a>".format(jobs[i][0], i+1, number)
-        resp += "{0}<br/>{1}<br/><a href={2} target='_blank'>View on Job Board</a>".format(jobs[i][1], jobs[i][2], jobs[i][-1])
-        resp += "</li>"
+        try:
+            resp += "<li>"
+            resp += "<a href=/page/{2}/desc/{1}><h3>{0}</h3></a>".format(jobs[i][0], i+1, number)
+            resp += "{0}<br/>{1}<br/><a href={2} target='_blank'>View on Job Board</a>".format(jobs[i][1], jobs[i][2], jobs[i][-1])
+            resp += "</li>"
+        except:
+            pass
     resp += "</ul>"
     resp += "<a href=/page/{0}/desc/{2}>Previous</a> <a href=/page/{1}/desc/{2}>Next</a>".format(int(number)-1, int(number)+1, num)
     resp += "</div></td><td valign=top>"
-    resp += jobs[int(num)-1][3].replace("\n", "<br/>")
+    try:
+        resp += jobs[int(num)-1][3].replace("\n", "<br/>")
+    except:
+        pass
     resp += "</td></tr></table>"
     return resp
 
@@ -75,10 +81,4 @@ def last_update():
     )
 
 if __name__ == "__main__":
-
-    with open('jobs.csv') as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            jobs.append(row)
-
     app.run(host="0.0.0.0", port=int(sys.argv[1]))

@@ -24,6 +24,21 @@ class AsyncFilter(threading.Thread):
         "principle"
     ]
 
+    FORBIDDEN_BODY = [
+        "masters",
+        "ms",
+        "master",
+        "lead",
+        "senior",
+        "sr",
+        "staff",
+        "chief",
+        "vp",
+        "manager",
+        "director",
+        "principal"
+    ]
+
     def __init__(self, writer, logger):
         threading.Thread.__init__(self)
         self.q = queue.Queue()
@@ -40,6 +55,10 @@ class AsyncFilter(threading.Thread):
             return False
         if any([i in job.title.lower() for i in AsyncFilter.FORBIDDEN_TITLE]):
             return False
+        #if any([i in job.desc.lower() for i in AsyncFilter.FORBIDDEN_BODY]):
+        #    return False
+        #if "years" in job.desc.lower() and "experience" in job.desc.lower():
+        #    return False
         self.seen.add((job.title, job.comp, job.loc))
         return True
 
