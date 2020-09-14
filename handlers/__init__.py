@@ -8,8 +8,8 @@ from handlers.IndeedHandler import IndeedHandler
 from handlers.MonsterHandler import MonsterHandler
 
 handlers = [
-    #MonsterHandler,
-    #IndeedHandler,
+    MonsterHandler,
+    IndeedHandler,
     LinkedInHandler,
-    #DiceHandler
+    DiceHandler
 ]
