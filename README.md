@@ -3,7 +3,7 @@
 ![number of jobs](https://img.shields.io/endpoint?url=https://cache.nlogn.blog/job-scraper/number_of_jobs&style=plastic)
 ![last updated](https://img.shields.io/endpoint?url=https://cache.nlogn.blog/job-scraper/last_update&style=plastic)
 
-Scrapes a list of entry level software engineering jobs for recent graduates compiled from major job boards daily.
+Scrapes a list of entry level software engineering jobs in California for recent graduates compiled from major job boards daily.
 
 ## Download Job List
 

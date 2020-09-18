@@ -16,6 +16,7 @@ class AsyncFilter(threading.Thread):
         "director",
         "principal",
         "ii", "iii", "iv", "v", "vi",
+        "2", "3", "4", "5", "6"
         "mid",
         "intermediate",
         "advanced",
@@ -55,8 +56,10 @@ class AsyncFilter(threading.Thread):
             return False
         if any([i in job.title.lower() for i in AsyncFilter.FORBIDDEN_TITLE]):
             return False
-        #if any([i in job.desc.lower() for i in AsyncFilter.FORBIDDEN_BODY]):
-        #    return False
+        if "ca" not in job.loc.lower():
+            return False
+        if any([i in job.desc.lower() for i in AsyncFilter.FORBIDDEN_BODY]):
+            return False
         #if "years" in job.desc.lower() and "experience" in job.desc.lower():
         #    return False
         self.seen.add((job.title, job.comp, job.loc))
