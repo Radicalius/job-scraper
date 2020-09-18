@@ -72,3 +72,5 @@ for handler in handlers:
 filter.queue_job(AsyncFilter.EOF)
 
 logger.info("Ingestion Finished; added {0} jobs".format(tot_jobs))
+
+requests.get("http://localhost:{0}/update".format(os.environ["PORT"]))
