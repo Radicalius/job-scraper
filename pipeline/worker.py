@@ -1,5 +1,5 @@
 import queue, threading
-from filter import AsyncFilter
+from pipeline.filter import AsyncFilter
 
 class AsyncWorker(threading.Thread):
 

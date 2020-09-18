@@ -1,5 +1,5 @@
 import threading, queue
-from writer import AsyncCsvWriter
+from pipeline.writer import AsyncCsvWriter
 
 class AsyncFilter(threading.Thread):
 

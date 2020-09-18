@@ -1,8 +1,8 @@
 import logging
 from handlers import *
-from writer import AsyncCsvWriter
-from worker import AsyncWorker
-from filter import AsyncFilter
+from pipeline.writer import AsyncCsvWriter
+from pipeline.worker import AsyncWorker
+from pipeline.filter import AsyncFilter
 
 logger = logging.getLogger("Crawler")
 logger.setLevel(logging.DEBUG)
